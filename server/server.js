@@ -8,6 +8,9 @@ const {User} = require('./models/user');
 
 let app = express();
 
+// set port to ENV var if set or 3000 if not.
+const port = process.env.PORT || 3000;
+
 // Set middleware to inject bodyParser to convert JSON to Javascript object
 app.use(bodyParser.json());
 
@@ -52,8 +55,8 @@ app.get('/todos/:id', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log(`Started on port 3000`)
+app.listen(port, () => {
+    console.log(`Started on port ${port}`)
 });
 
 module.exports = {app};
