@@ -1,28 +1,28 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const {mongoose} = require ('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-let Todo = mongoose.model('Todo', {
-   text: {
-       type: String
-   },
-    completed: {
-        type: Boolean
-    },
-    completedAt: {
-        type: Number
-    }
+let app = express();
+
+// Set middleware to inject bodyParser to convert JSON to Javascript object
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+    let todo = new Todo({
+        text: req.body.text
+    });
+    todo.save().then((doc) => {
+        res.send(doc);
+    }, (e) => {
+        res.status(400).send(e);
+    });
 });
 
-let newTodo = new Todo({
-    text: 'Take medicine',
-    completed: true,
-    completedAt: 123451
-});
+// Challenge - set text for a todo.
 
-newTodo.save().then((doc) => {
-    console.log(`Saved todo ${doc}`)
-}, (e) => {
-    console.log('Unable to save Todo')
+app.listen(3000, () => {
+    console.log(`Started on port 3000`)
 });
