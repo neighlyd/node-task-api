@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 mongoose.promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/TodoApp');
+mongoose.connect(process.env.MONGODB_URI);
 
 module.exports = {mongoose};
+
+// Heroku sets process.env.NODE_ENV === 'production'
+// we can then set these to 'test' or 'development' to modify the MongoDB as desired.
