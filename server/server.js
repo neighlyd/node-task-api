@@ -120,7 +120,7 @@ app.post('/users', (req, res) => {
     });
 });
 
-// app.get('/users', (req, res) => {
+// app.get('/users', authenticate, (req, res) => {
 //     User.find().then((users) => {
 //         // Send the users back as an object, since that allows us to expand it in the future with additional properties.
 //         res.send({users});
