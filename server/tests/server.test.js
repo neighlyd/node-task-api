@@ -4,23 +4,11 @@ const {ObjectID} = require('mongodb');
 
 const {app} = require('../server');
 const {Todo} = require('../models/todo');
+const {User} = require('../models/user');
+const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
 
-const todos = [{
-    _id: new ObjectID(),
-    text: 'First test todo',
-}, {
-    _id: new ObjectID(),
-    text: 'Second test todo',
-    completed: true,
-    completedAt: 999
-}];
-
-beforeEach((done) => {
-    // The Udemy course uses db.remove({}), but this is deprecated; so we use db.deleteMany();
-    Todo.deleteMany({}).then(() => {
-        return Todo.insertMany(todos);
-    }).then(() => done());
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
@@ -171,4 +159,84 @@ describe('PATCH /todos/:id', () => {
             .end(done);
     });
 
+});
+
+describe('GET /users/me', () => {
+    it('should return user object if authenticated', (done) => {
+       let user = users[0];
+       let token = user.tokens[0].token;
+
+       request(app)
+           .get('/users/me')
+           .set('x-auth', token)
+           .expect(200)
+           .expect((res) => {
+               expect(res.body._id).toBe(user._id.toHexString());
+               expect(res.body.email).toBe(user.email);
+
+           })
+           .end(done);
+    });
+
+    it('should return 401 if not authenticated', (done) => {
+       let user = users[1];
+
+       request(app)
+           .get('/users/me')
+           .expect(401)
+           .expect((res) => {
+               expect(res.body).toEqual({});
+           })
+           .end(done);
+    });
+});
+
+describe('POST /users', () => {
+    it('should create a user', (done) => {
+        let email = 'example@example.com';
+        let password = '1234password';
+
+        request(app)
+            .post('/users')
+            .send({email, password})
+            .expect(200)
+            .expect((res) => {
+                expect(res.header['x-auth']).toBeDefined();
+                expect(res.body._id).toBeDefined();
+                expect(res.body.email).toBe('example@example.com');
+            })
+            .end((err) => {
+                if (err) {
+                    return done(err);
+                }
+
+                User.findOne({email}).then((user) => {
+                    expect(user).toBeDefined();
+                    expect(user.password).not.toBe(password);
+                });
+                done();
+            });
+    });
+
+    it('should not return validation errors if request invalid', (done) => {
+        let email = 'dustin.com';
+        let password = '';
+
+        request(app)
+            .post('/users')
+            .send({email, password})
+            .expect(400)
+            .end(done);
+    });
+
+    it('should not create user if email already in database', (done) => {
+        request(app)
+            .post('/users')
+            .send({
+                email: users[0].email,
+                password: 'password123'
+            })
+            .expect(400)
+            .end(done);
+    });
 });

@@ -128,24 +128,6 @@ app.post('/users', (req, res) => {
 //     });
 // });
 
-// let authenticate = (req, res, next) => {
-//     let token = req.header('x-auth');
-//     console.log(token);
-//     next();
-//
-//     User.findByToken(token).then((user) => {
-//         if (!user) {
-//             return Promise.reject();
-//         }
-//
-//         req.user = user;
-//         req.token = token;
-//         next();
-//     }).catch((e) => {
-//         res.sendStatus(401);
-//     });
-// };
-
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });

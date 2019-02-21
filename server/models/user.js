@@ -4,7 +4,7 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const secretKey = 'secret eventually into env config file'
+const secretKey = 'secret eventually into env config file';
 
 let UserSchema = new mongoose.Schema({
     email: {
@@ -95,4 +95,4 @@ UserSchema.pre('save', function (next) {
 
 let User = mongoose.model('User', UserSchema);
 
-module.exports = {User};
+module.exports = {User, secretKey};
