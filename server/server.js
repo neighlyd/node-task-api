@@ -23,7 +23,7 @@ app.post('/todos', (req, res) => {
     });
     todo.save().then((doc) => {
         res.send(doc);
-    }, (e) => {
+    }).catch((e) => {
         res.status(400).send(e);
     });
 });
@@ -101,6 +101,29 @@ app.patch('/todos/:id', (req, res) => {
         res.send({todo});
     }).catch((e) => {
         res.sendStatus(400);
+    });
+});
+
+app.post('/users', (req, res) => {
+    // use lodash.pick() so we only pass the information we want to the User model, not just any information the user sends us.
+    let body = _.pick(req.body, ['email', 'password']);
+    let user = new User({email: body.email, password: body.password});
+
+    user.save().then(() => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
+app.get('/users', (req, res) => {
+    User.find().then((users) => {
+        // Send the users back as an object, since that allows us to expand it in the future with additional properties.
+        res.send({users});
+    }).catch((e) => {
+        res.status(400).send(e);
     });
 });
 
