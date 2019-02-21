@@ -8,6 +8,7 @@ const {ObjectID} = require('mongodb');
 const {mongoose} = require ('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
+const {authenticate} = require('./middleware/authenticate');
 
 let app = express();
 
@@ -118,13 +119,35 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.get('/users', (req, res) => {
-    User.find().then((users) => {
-        // Send the users back as an object, since that allows us to expand it in the future with additional properties.
-        res.send({users});
-    }).catch((e) => {
-        res.status(400).send(e);
-    });
+// app.get('/users', (req, res) => {
+//     User.find().then((users) => {
+//         // Send the users back as an object, since that allows us to expand it in the future with additional properties.
+//         res.send({users});
+//     }).catch((e) => {
+//         res.status(400).send(e);
+//     });
+// });
+
+// let authenticate = (req, res, next) => {
+//     let token = req.header('x-auth');
+//     console.log(token);
+//     next();
+//
+//     User.findByToken(token).then((user) => {
+//         if (!user) {
+//             return Promise.reject();
+//         }
+//
+//         req.user = user;
+//         req.token = token;
+//         next();
+//     }).catch((e) => {
+//         res.sendStatus(401);
+//     });
+// };
+
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 app.listen(port, () => {
