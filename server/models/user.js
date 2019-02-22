@@ -4,8 +4,6 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const secretKey = 'secret eventually into env config file';
-
 let UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -45,7 +43,7 @@ UserSchema.methods.toJSON = function() {
 UserSchema.methods.generateAuthToken = function () {
     let user = this;
     let access = 'auth';
-    let token = jwt.sign({_id: user._id.toHexString(), access}, secretKey).toString();
+    let token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
     user.tokens = user.tokens.concat([{access, token}]);
 
@@ -60,7 +58,7 @@ UserSchema.statics.findByToken = function (token) {
     let decoded;
 
     try {
-        decoded = jwt.verify(token, secretKey);
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (e) {
         return Promise.reject();
         /*
@@ -122,4 +120,4 @@ UserSchema.pre('save', function (next) {
 
 let User = mongoose.model('User', UserSchema);
 
-module.exports = {User, secretKey};
+module.exports = {User};
