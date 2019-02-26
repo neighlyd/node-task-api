@@ -19,76 +19,80 @@ const port = process.env.PORT || 3000;
 // Set middleware to inject bodyParser to convert JSON to Javascript object
 app.use(bodyParser.json());
 
-app.post('/todos', authenticate, (req, res) => {
-    let todo = new Todo({
-        text: req.body.text,
-        _creator: req.user._id
-    });
-    todo.save().then((doc) => {
-        res.send(doc);
-    }).catch((e) => {
+app.post('/todos', authenticate, async (req, res) => {
+    try {
+        const todo = new Todo({
+            text: req.body.text,
+            _creator: req.user._id
+        });
+        const doc = await todo.save();
+        res.send(doc)
+    } catch (e) {
         res.status(400).send(e);
-    });
+    };
 });
 
-app.get('/todos', authenticate, (req, res) => {
-   Todo.find({
-       _creator: req.user._id
-   }).then((todos) => {
-       // Send the todos back as an object, since that allows us to expand it in the future with additional properties.
-       res.send({todos});
-   }, (e) => {
+app.get('/todos', authenticate, async (req, res) => {
+   try {
+       const todos = await Todo.find({_creator: req.user._id});
+        // Send the todos back as an object, since that allows us to expand it in the future with additional properties.
+        res.send({todos});
+   } catch (e) {
        res.status(400).send(e);
-   });
+   }
 });
 
-app.get('/todos/:id', authenticate, (req, res) => {
-    let id = req.params.id;
+app.get('/todos/:id', authenticate, async (req, res) => {
+    const id = req.params.id;
 
     // Validate id using isValid
     if(!ObjectID.isValid(id)) {
         return res.sendStatus(400);
     }
 
-    Todo.findOne({
-        _id: id,
-        _creator: req.user._id
-    }).then((todo) => {
+    try {
+        const todo = await Todo.findOne({
+            _id: id,
+            _creator: req.user._id
+        });
         // id not found
         if (!todo) {
             return res.sendStatus(404);
         }
         // id found
         res.send({todo});
-    }).catch((e) => {
+    } catch (e) {
         // Some other error... things be borked somewhere.
         res.sendStatus(400);
-    });
+    }
 });
 
-app.delete('/todos/:id', authenticate, (req, res) => {
-   let id = req.params.id;
+app.delete('/todos/:id', authenticate, async (req, res) => {
+   const id = req.params.id;
 
    // Validate id is correct using isValid
     if(!ObjectID.isValid(id)) {
         return res.sendStatus(400);
     }
 
-    Todo.findOneAndDelete({
-        _id: id,
-        _creator: req.user.id
-    }).then((todo) => {
+    try {
+        const todo = await Todo.findOneAndDelete({
+            _id: id,
+            _creator: req.user.id
+        });
+
         if(!todo){
-            return res.sendStatus(404);
-        }
+                return res.sendStatus(404);
+            }
+
         res.send({todo});
-    }).catch((e) => {
+    } catch (e) {
         res.sendStatus(400);
-    });
+    }
 });
 
-app.patch('/todos/:id', authenticate, (req, res) => {
-   let id = req.params.id;
+app.patch('/todos/:id', authenticate, async (req, res) => {
+   const id = req.params.id;
    // use lodash to select only the elements that users should be able to modify.
    let body = _.pick(req.body, ['text', 'completed']);
 
@@ -104,69 +108,63 @@ app.patch('/todos/:id', authenticate, (req, res) => {
         body.completed = false;
         body.completedAt = null;
     }
+    try {
+        const todo = await Todo.findOneAndUpdate({_id: id, _creator: req.user.id}, {$set: body}, {new: true});
 
-    Todo.findOneAndUpdate({
-        _id: id,
-        _creator: req.user.id
-    }, {
-        $set: body
-    }, {
-        new: true
-    }).then((todo) => {
         if (!todo) {
             return res.sendStatus(404);
         }
         res.send({todo});
-    }).catch((e) => {
+    }catch (e) {
         res.sendStatus(400);
-    });
+    }
 });
 
-app.post('/users', (req, res) => {
-    // use lodash.pick() so we only pass the information we want to the User model, not just any information the user sends us.
-    let body = _.pick(req.body, ['email', 'password']);
-    let user = new User({email: body.email, password: body.password});
-
-    user.save().then(() => {
-        return user.generateAuthToken();
-    }).then((token) => {
+app.post('/users', async (req, res) => {
+    try {
+        // use lodash.pick() so we only pass the information we want to the User model, not just any information the user sends us.
+        const body = _.pick(req.body, ['email', 'password']);
+        const user = new User({email: body.email, password: body.password});
+        await user.save();
+        const token = await user.generateAuthToken();
         res.header('x-auth', token).send(user);
-    }).catch((e) => {
+    } catch(e) {
         res.status(400).send(e);
-    });
+    }
 });
 
-app.get('/users', authenticate, (req, res) => {
-    User.find().then((users) => {
+app.get('/users', authenticate, async (req, res) => {
+    try {
+        const users = await User.find();
         // Send the users back as an object, since that allows us to expand it in the future with additional properties.
         res.send({users});
-    }).catch((e) => {
+    } catch (e) {
         res.status(400).send(e);
-    });
+    }
 });
 
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
 
-app.post('/users/login', (req, res) => {
-    let body = _.pick(req.body, ['email', 'password']);
-
-    User.findByCredentials(body.email, body.password).then((user) => {
-        return user.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send(user);
-        });
-        }).catch((e) => {
-            res.sendStatus(400);
-    });
+app.post('/users/login', async (req, res) => {
+    try {
+        const body = _.pick(req.body, ['email', 'password']);
+        const user = await User.findByCredentials(body.email, body.password);
+        const token = await user.generateAuthToken();
+        res.header('x-auth', token).send(user);
+    } catch (e) {
+        res.sendStatus(400);
+    }
 });
 
-app.delete('/users/me/token', authenticate, (req, res) => {
-    req.user.removeToken(req.token).then(() => {
-        res.sendStatus(200)
-    }, () => {
+app.delete('/users/me/token', authenticate, async (req, res) => {
+    try {
+        await req.user.removeToken(req.token);
+        res.sendStatus(200);
+    } catch (e) {
         res.sendStatus(400);
-    });
+    }
 });
 
 app.listen(port, () => {
