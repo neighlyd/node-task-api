@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-let Todo = mongoose.model('Todo', {
+const TaskSchema = new mongoose.Schema({
     text: {
         type: String,
         required: true,
@@ -11,14 +11,15 @@ let Todo = mongoose.model('Todo', {
         type: Boolean,
         default: false
     },
-    completedAt: {
-        type: Number,
-        default: null
-    },
-    _creator: {
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     }
-});
+}, {
+    timestamps: true
+})
 
-module.exports = {Todo};
+let Task = mongoose.model('Task', TaskSchema)
+
+module.exports = Task
