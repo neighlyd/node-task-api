@@ -1,12 +1,13 @@
 const {ObjectID} = require('mongodb');
 const jwt = require('jsonwebtoken');
 
-const Task = require('../../models/task')
-const User = require('../../models/user')
+const Task = require('../../src/models/task')
+const User = require('../../src/models/user')
 
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 const userThreeId = new ObjectID();
+const userFourId = new ObjectID();
 
 const users = [{
     _id: userOneId,
@@ -35,6 +36,11 @@ const users = [{
     tokens: [{
         token: jwt.sign({_id: userThreeId}, process.env.JWT_SECRET).toString()
     }]
+}, {
+    _id: userFourId,
+    name: 'UserFour',
+    email: 'four@example.com',
+    password: 'alwaysSecure'
 }];
 
 const tasks = [{
@@ -56,22 +62,17 @@ const tasks = [{
     owner: userTwoId
 }];
 
-const populateTasks = (done) => {
-    // The Udemy course uses db.remove({}), but this is deprecated; so we use db.deleteMany();
-    Task.deleteMany({}).then(() => {
-        return Task.insertMany(tasks);
-    }).then(() => done());
+const populateTasks = async () => {
+    await Task.deleteMany()
+    await Task.insertMany(tasks);
 };
 
-const populateUsers = (done) => {
-    User.deleteMany({}).then(() => {
-        let userOne = new User(users[0]).save();
-        let userTwo = new User(users[1]).save();
-        let userThree = new User(users[2]).save();
-
-        // Promise.all([n]) waits until ALL n promises are resolved to trigger callbacks.
-        Promise.all([userOne, userTwo, userThree])
-    }).then(() => done());
+const populateUsers = async () => {
+    await User.deleteMany()
+    await new User(users[0]).save();
+    await new User(users[1]).save();
+    await new User(users[2]).save();
+    await new User(users[3]).save();
 };
 
 module.exports = {tasks, populateTasks, users, populateUsers};
