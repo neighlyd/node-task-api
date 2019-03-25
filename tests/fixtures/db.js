@@ -62,17 +62,26 @@ const tasks = [{
     owner: userTwoId
 }];
 
+const setupDatabase = async () => {
+    await Task.deleteMany()
+    await User.deleteMany()
+    
+    await new User(users[0]).save()
+    await new User(users[1]).save()
+    await new User(users[2]).save()
+    await new User(users[3]).save()
+    
+    await new Task(tasks[0]).save()
+    await new Task(tasks[1]).save()
+    await new Task(tasks[2]).save()
+    await new Task(tasks[3]).save()
+}
+
 const populateTasks = async () => {
     await Task.deleteMany()
-    await Task.insertMany(tasks);
 };
 
 const populateUsers = async () => {
-    await User.deleteMany()
-    await new User(users[0]).save();
-    await new User(users[1]).save();
-    await new User(users[2]).save();
-    await new User(users[3]).save();
 };
 
-module.exports = {tasks, populateTasks, users, populateUsers};
+module.exports = { tasks, users,setupDatabase };
