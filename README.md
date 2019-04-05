@@ -61,7 +61,6 @@ The following software is required to run the task app api.
 ## Installation and Usage
 To install and run locally:
 * [First make sure your mongoDB database is up and running.](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
-* 
 
 ```bash
 $ git clone git://github.com/neighlyd/node-todo-api
