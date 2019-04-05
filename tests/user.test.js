@@ -95,12 +95,14 @@ describe('GET /users/:id', () => {
         await request(app).get(`/users/${user._id.toString()}1`).set('Authorization', `Bearer ${token}`).expect(400)
     })
 
-    it('should return 401 if not Admin and not requesting self', async () => {
+    it('should return user object if not requesting self', async () => {
         const user = users[0]
         const token = user.tokens[0].token
-        const hexID = new ObjectID().toString()
+        const user2 = users[1]
 
-        await request(app).get(`/users/${hexID}`).set('Authorization', `Bearer ${token}`).expect(401)
+        const res = await request(app).get(`/users/${user2._id}`).set('Authorization', `Bearer ${token}`).expect(200)
+        expect(res.body._id).toBe(user2._id.toString())
+        expect(res.body.name).toBe(user2.name)
     })
 });
 

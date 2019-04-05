@@ -69,12 +69,9 @@ router.patch('/users/me', authenticate, async (req, res) => {
 
 router.get('/users/:id', authenticate, validateID, async (req, res) => {
     try {
-        if((req.user.id == req.id) || (req.user.admin === true)){
-            const user = await User.findById(req.id);
-            res.send(user);
-        } else {
-            res.sendStatus(401)
-        }
+        const user = await User.findById(req.id);
+        res.send(user);
+        
     } catch (e) {
         res.status(500).send(e);
     }
@@ -127,7 +124,7 @@ router.post('/users/login', async (req, res) => {
         const token = await user.generateAuthToken();
         res.send({token, user});
     } catch (e) {
-        res.sendStatus(400);
+        res.status(400).send({non_field_errors: ["Unable to login with provided credentials."]});
     }
 });
 
