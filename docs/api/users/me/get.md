@@ -8,6 +8,8 @@ Retrieve profile of authenticated user. This is a convenience route.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User is authenticated.

@@ -8,6 +8,8 @@ Delete avatar for user profile.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User exists and has an uploaded avatar file.

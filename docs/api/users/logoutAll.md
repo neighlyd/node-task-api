@@ -10,6 +10,8 @@ Remove **all** JWT Tokens from user profile.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User is authenticated.

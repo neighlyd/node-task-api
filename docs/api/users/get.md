@@ -8,6 +8,8 @@ Retrieve a list of all users.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User is authenticated.

@@ -8,6 +8,8 @@ Retrieve profile of user by id.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : ID is valid and user is authenticated.

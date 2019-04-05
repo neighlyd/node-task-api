@@ -8,6 +8,8 @@ Get an avatar for user profile by id.
 
 **Auth required** : YES
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User exists and has an uploaded avatar file.

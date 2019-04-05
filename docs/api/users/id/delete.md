@@ -10,6 +10,8 @@ Delete a user by id. Returns an object containing the deleted user information.
 
 **Permission Required** : User or Admin
 
+**Data constraints** : `{}`
+
 ## Success Response
 
 **Condition** : User exists and is self or Admin.
