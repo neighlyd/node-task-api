@@ -1,9 +1,9 @@
 # Task App
 
-The Task App allows users to create accounts and track their tasks, marking them as completed. It has built-in filtering and querying for tasks. Routes are secured behind authentication and tasks are automatically filtered by user. The API connects to a MongoDB that preserves all user and task information.
+The Task App allows users to create accounts and track their tasks, marking them as completed. It has built-in filtering and querying for tasks. Routes are secured behind authentication and tasks are automatically filtered by user profile. The API connects to a mongoDB instance that preserves all user and task information.
 
 # API Documentation
-The following endpoints are accessible through the API. Click on each to read more about the data constraints, responses, errors, and to see examples.
+The following endpoints are accessible through the API. Select each to read more about the data constraints, responses, errors, and to see examples.
 
 ## Open Endpoints
 
@@ -60,7 +60,7 @@ The following software is required to run the task app api.
 
 ## Installation and Usage
 To install and run locally:
-* [First make sure your MongoDB database is up and running.](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
+* [First make sure your mongoDB database is up and running.](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
 * 
 
 ```bash

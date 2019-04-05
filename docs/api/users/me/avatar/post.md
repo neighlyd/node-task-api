@@ -10,12 +10,18 @@ Upload an avatar for user profile.
 
 **Data constraints** :
 ```html
-Form-Data
-avatar: [<image-title>.jpg/.jpeg/.png]
+POST /users/me/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=MultipartBoundry
+
+--MultipartBoundry
+Content-Disposition: form-data; name="avatar"; filename="image_name.jpg"
+Content-Type: image/jpeg
+
 ```
-> Note: This route receives `Form-Data` rather than a `JSON` object. Its key-value pairs are `avatar` and a file ending in `.jpg`, `.jpeg`, or `.png`.
+> Note: This route receives `multipart/form-data` rather than a `JSON` object. Its key-value pairs are `avatar` and a file ending in `.jpg`, `.jpeg`, or `.png`.
 
 > Note: The image must be below 1 Megabyte in size.
+> 
 ## Success Response
 
 **Condition** : User exists, file ends in .jpg/.jpeg/.png, and image is below 1MB.
