@@ -16,7 +16,7 @@ Delete a single task belonging to an authenticated user. Returns an object conta
 
 **Code** : `200 OK`
 
-**Content example** : The task is deleted from the server, but client receives a copy of the deleted object.
+**Content example** : The task is deleted from the server. The client receives a copy of the deleted object.
 
 ```json
 {

@@ -24,16 +24,17 @@ These endpoints affect the currently authenticated user determined by the JWT To
 
 The code for these routes can be found in [routes/user.js](/src/routes/user.js).
 
-* [List All Users](): `GET /users`
-* [Show Info (self)](): `GET /users/me`
-* [Update Info (self)](): `PATCH /users/me`
-* [Show Info (other)](): `GET /users/:id`
-* [Update Info (other)](): `PATCH /users/:id`
-* [Delete Info (other)](): `DELETE /users/:id`
-* [Logout](): `POST /users/logoutAll`
-* [Upload Avatar](): `POST /users/me/avatar`
-* [Delete Avatar](): `DELETE /users/me/avatar`
-* [Show Avatar](): `GET /users/:id/avatar`
+* [List All Users](/docs/api/users/get.md): `GET /users`
+* [Show Info (self)](/docs/api/users/me/get.md): `GET /users/me`
+* [Update Info (self)](/docs/api/users/me/patch.md): `PATCH /users/me`
+* [Show Info (other)](/docs/api/users/id/get.md): `GET /users/:id`
+* [Update Info (other)](/docs/api/users/id/patch.md): `PATCH /users/:id`
+* [Delete Info (other)](/docs/api/users/id/delete.md): `DELETE /users/:id`
+* [Logout Single](/docs/api/users/logout.md): `POST /users/logout`
+* [Logout All Sessions](/docs/api/users/logoutAll.md): `POST /users/logoutAll`
+* [Upload Avatar](/docs/api/users/me/avatar/post.md): `POST /users/me/avatar`
+* [Show Avatar](/docs/api/users/:id/avatar): `GET /users/:id/avatar`
+* [Delete Avatar](/docs/api/users/me/avatar): `DELETE /users/me/avatar`
 
 ### Task Endpoints
 ____
@@ -47,3 +48,69 @@ The code for these routes can be found in [routes/task.js](/src/routes/task.js).
 * [Update Single Task](/docs/api/tasks/id/patch.md): `PATCH /tasks/:id`
 * [Delete Single Task](/docs/api/tasks/id/delete.md): `DELETE /tasks/:id`
 
+# Installation
+
+If you want to install your own version of the task app api please follow these instructions. 
+
+## Requirements
+The following software is required to run the task app api.
+* `git`
+* `node`
+* `mongodb`
+
+## Installation and Usage
+To install and run locally:
+* [First make sure your MongoDB database is up and running.](https://docs.mongodb.com/manual/installation/#mongodb-community-edition)
+* 
+
+```bash
+$ git clone git://github.com/neighlyd/node-todo-api
+$ cd node-todo-api
+$ npm install
+$ mkdir config
+$ cd config
+$ touch dev.env test.env
+```
+
+Your dev.env and test.env files should have the following key-value pairs within them.
+
+```
+#dev.env
+PORT=3000
+MONGODB_URI="mongodb://localhost:27017/task-app"
+JWT_SECRET="Type some random stuff in here to generate a secret key for JWT"
+SENDGRID_API_KEY="Your Sendgrid API key goes here"
+```
+
+```
+#test.env
+PORT=3000
+MONGODB_URI="mongodb://localhost:27017/task-app-test"
+JWT_SECRET="More random stuff in here for another JWT secret Key"
+SENDGRID_API_KEY="Your Sendgrid API key again here"
+```
+
+If you need information on setting up a Sendgrid API key, [check out this tutorial.](https://sendgrid.com/docs/for-developers/sending-email/api-getting-started/)
+
+Finally, run:
+
+```bash
+$ npm run dev
+```
+
+This will launch the task app at `localhost:3000/`
+
+---------
+If you wish to deploy the app remotely to heroku, I recommend viewing their (Getting Started on Heroku with Node.js tutorial)[https://devcenter.heroku.com/articles/getting-started-with-nodejs].
+
+## Testing
+
+Once you have the app installed, you can test it by running the following command:
+
+```bash
+$ npm test
+```
+
+## Feedback
+
+If you have any feedback, suggestions, or thoughts, please feel free to drop me a line in the issues tab or by sending me an email at neighlyd at gmail.
