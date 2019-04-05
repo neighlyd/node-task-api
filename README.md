@@ -2,6 +2,8 @@
 
 The Task App allows users to create accounts and track their tasks, marking them as completed. It has built-in filtering and querying for tasks. Routes are secured behind authentication and tasks are automatically filtered by user profile. The API connects to a mongoDB instance that preserves all user and task information.
 
+A demo of the API can be reached at https://neighly-task-app.herokuapp.com/
+
 # API Documentation
 The following endpoints are accessible through the API. Select each to read more about the data constraints, responses, errors, and to see examples.
 
