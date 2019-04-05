@@ -101,7 +101,7 @@ $ npm run dev
 This will launch the task app at `localhost:3000/`
 
 ---------
-If you wish to deploy the app remotely to heroku, I recommend viewing their (Getting Started on Heroku with Node.js tutorial)[https://devcenter.heroku.com/articles/getting-started-with-nodejs].
+If you wish to deploy the app remotely to heroku, I recommend viewing their [Getting Started on Heroku with Node.js tutorial](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 
 ## Testing
 
