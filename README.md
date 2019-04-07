@@ -118,8 +118,8 @@ If you have any feedback, suggestions, or thoughts, please feel free to drop me 
 
 ## Acknowledgements
 
-@andrew_j_mead
-Udemy Link
+This project grew out of Andrew Mead's excellent and informative [Udemy Node class](https://www.udemy.com/the-complete-nodejs-developer-course-2/). If you are interested in learning Javascript, Node, or React, I highly recommend checking out [his courses](https://www.udemy.com/user/andrewmead/). You can find him on [twitter @andrew_j_mead](https://twitter.com/andrew_j_mead).
 
-@jamescooke
-https://github.com/jamescooke/restapidocs
+The API documentation was inspired by [@jamescooke](https://github.com/jamescooke]'s comprehensive [REST API docs repository.](https://github.com/jamescooke/restapidocs)
+
+Another example of clear and concise REST API documentation can be found on the [OpenStack project.](https://developer.openstack.org/api-ref/application-catalog/v1/)
