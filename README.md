@@ -115,3 +115,11 @@ $ npm test
 ## Feedback
 
 If you have any feedback, suggestions, or thoughts, please feel free to drop me a line in the issues tab or by sending me an email at neighlyd at gmail.
+
+## Acknowledgements
+
+@andrew_j_mead
+Udemy Link
+
+@jamescooke
+https://github.com/jamescooke/restapidocs
